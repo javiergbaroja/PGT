@@ -175,8 +175,8 @@ class CellDetDataset_Lizard(CustomDataset):
     def det(self, pred_centroid, pred_inst_type, img_name, img_idx):
         img_path = os.path.join(self.data_root, img_name + ".mat")
         true_info = sio.loadmat(img_path)
-        true_centroid = (true_info["inst_centroid"]).astype("float32")
-        true_inst_type = (true_info["inst_type"]).astype("int32")
+        true_centroid = (true_info["centroid"]).astype("float32")
+        true_inst_type = (true_info["class"]).astype("int32")
 
         if true_centroid.shape[0] != 0:
             true_inst_type = true_inst_type[:, 0]
@@ -347,16 +347,16 @@ class CellDetDataset_Lizard(CustomDataset):
 
         results_dict = {}
         results_dict["F1c_Avg"] = 0
-        print_log("\n===========================Evaluation=======================", logger=logger)
-        print_log("F1 Detection:{}".format(results_list[0]), logger=logger)
+        # print_log("\n===========================Evaluation=======================", logger=logger)
+        # print_log("F1 Detection:{}".format(results_list[0]), logger=logger)
         results_dict["F1d"] = results_list[0]
         for i in range(len(self.cat_ids)):
-            print_log("F1 Type{}:{}".format(self.cat_ids[i], results_list[i + 2]), logger=logger)
+            # print_log("F1 Type{}:{}".format(self.cat_ids[i], results_list[i + 2]), logger=logger)
             results_dict["F1_Type{}".format(self.cat_ids[i])] = results_list[i + 2]
             results_dict["F1c_Avg"] += results_list[i+2]
         results_dict["F1c_Avg"] /= len(self.cat_ids)
-        print_log("F1c Avg:{}".format(results_dict["F1c_Avg"]))
-        print_log("===========================Evaluation=======================\n", logger=logger)
+        # print_log("F1c Avg:{}".format(results_dict["F1c_Avg"]))
+        # print_log("===========================Evaluation=======================\n", logger=logger)
 
         return results_dict
 
