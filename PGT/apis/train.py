@@ -1,5 +1,7 @@
 import random
+import os
 import warnings
+import glob
 
 import numpy as np
 import torch
@@ -202,5 +204,9 @@ def train_detector(
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
+        if cfg.load_from.endswith(".pth"):
+            runner.load_checkpoint(cfg.load_from)
+        elif os.path.isdir(cfg.load_from):
+            cfg.load_from = glob.glob(os.path.join(cfg.load_from, "best_*_iter_*.pth"))[-1]
         runner.load_checkpoint(cfg.load_from)
     runner.run(data_loaders, cfg.workflow)
